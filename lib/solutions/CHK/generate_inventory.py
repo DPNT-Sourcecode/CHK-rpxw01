@@ -39,8 +39,11 @@ def generate_inventory():
     into a database, for a more realistic scenario.
     """
     for inventory_line in INVENTORY.strip().splitlines():
-        cleaned_line = inventory_line.strip("| ")
-        pieces = cleaned_line.split("|")
+
+        # don't strip the bars off the ends, else the rows without offers will have fewer items after splitting.
+        # eg: ``['', ' C    ', ' 20    ', '                        ', '']``
+        pieces = inventory_line.split("|")
+
         pieces = [p.strip() for p in pieces]
 
 
@@ -49,4 +52,5 @@ def generate_inventory():
 
 if __name__ == "__main__":
     generate_inventory()
+
 
