@@ -173,10 +173,24 @@ def get_bogof_offer(offer_str: str) -> str:
         free_count=1,
     )
 
+
 def get_group_offer(offer_str: str) -> str:
     """
-    Takes a string like
+    Takes a string like ``buy any 3 of (S,T,X,Y,Z) for 45 and formats a GroupOffer init``.
+
+    could use regex to find the pieces between the brackets, but can extend to that later if needed.
     """
+    pieces = offer_str.split()
+    count = int(pieces[2])
+    price = int(pieces[-1])
+    products_base_str = pieces[4].strip("()")
+    products = ", ".join([f'"{p}"' for p in products_base_str.split(",")])
+
+    return GROUP_OFFER_TEMPLATE(
+        count=count,
+        products=products,
+        price=price,
+    )
 
 
 def generate_inventory():
@@ -240,4 +254,5 @@ def generate_inventory():
 
 if __name__ == "__main__":
     generate_inventory()
+
 
