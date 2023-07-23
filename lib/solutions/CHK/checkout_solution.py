@@ -116,15 +116,22 @@ def checkout(skus: str):
 
     for product_name, product_order_count in orders_counter.items():
         product = products_map[product_name]
+        # For each bogof (in case there could be multiple)
+        # TODO: sort by number required for free (asc)
         if product.bogof_offers:
+            remaining_order_count = product_order_count
+            # for each bogof for that product
             for bogof_offer in product.bogof_offers:
-
+                # get the number the offer gives free of the other thing
+                num_free, remaining_order_count = bogof_offer(remaining_order_count)
+                # and add that number to the list. use defaultdict to simplify stuff.
+                free_products[bogof_offer.free_product] += num_free
 
 
 
 
     for product_name, product_order_count in orders_counter.items():
-        base_price = products_map[product_name].price
+        product = products_map[product_name]
         offer = products_map[product_name].offer
         #  handle the special offer
         product_order_price = 0
@@ -139,3 +146,4 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
+
