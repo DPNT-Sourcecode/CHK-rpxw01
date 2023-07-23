@@ -127,7 +127,7 @@ class SKU:
 ###################################################################
 
 MODULE_TEMPLATE = """
-from .generate_inventory import SKU, SpecialOffer, BOGOFOffer
+from .generate_inventory import SKU, SpecialOffer, BOGOFOffer, GroupOffer
 
 
 GROUP_OFFERS = [
@@ -277,4 +277,5 @@ def generate_inventory():
 
 if __name__ == "__main__":
     generate_inventory()
+
 

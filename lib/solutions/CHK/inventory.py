@@ -1,4 +1,4 @@
-from .generate_inventory import SKU, SpecialOffer, BOGOFOffer
+from .generate_inventory import SKU, SpecialOffer, BOGOFOffer, GroupOffer
 
 
 GROUP_OFFERS = [

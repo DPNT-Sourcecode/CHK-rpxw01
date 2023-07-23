@@ -53,6 +53,15 @@ def test_generate_test_string(input: str, expected: str):
     ("6F 2A", 140),
 
 
+    ("3Z", 45),
+    ("1X 1Y 1Z", 45),
+    ("1X 1Y 2Z", 45 + 17),
+    ("1S 1T 1X 1Y 1Z", 17 + 20),
+    ("1S 1T 1X 1Y 2Z", 90),
+
+
+
 ])
 def test_checkout(input_str, expected_price):
     assert checkout(generate_test_string(input_str)) == expected_price
+
