@@ -3,11 +3,26 @@ from collections import Counter
 import math
 
 
+# 2 different types of offer for now.
+# Could be worth subclassing them off something common later, but not obviously worthwhile now.
+
+
 @ dataclass
 class SpecialOffer:
     """Represents a special offer for some product."""
     count: int
     price: int
+
+
+@ dataclass
+class BOGOFOffer:
+    """
+    Buy `n X product`, get `m X another_product` free.
+    Can be later extended if needed for more combinations but works for this spec.
+    """
+    count: int
+    free_product: str
+    free_count: int
 
 
 @dataclass
@@ -20,7 +35,8 @@ class SKU:
     """
     name: str
     price: int
-    offer: SpecialOffer | None = None
+    offers: list[SpecialOffer] | None = None
+    bogof_offers: list[BOGOFOffer] | None = None
 
 
 products_list = [
@@ -53,6 +69,7 @@ allowed_products: set[str] = {p.name for p in products_list}
 def checkout(skus: str):
     """
     Calculate the total price of a list of items.
+    Round 2.
 
     The argument is a string containing the SKUs of all products in the basket.
     The input is not well defined for now, so we will assume (lol) that it is like
@@ -86,5 +103,6 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
+
 
 
