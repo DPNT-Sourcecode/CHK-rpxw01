@@ -45,6 +45,16 @@ INVENTORY = """
 
 
 @dataclass
+class GroupOffer:
+    """
+    Represents a Group offer for some collection of products.
+    """
+    count: int
+    price: int
+    products: list[str]
+
+
+@dataclass
 class SpecialOffer:
     """Represents a special offer for some product."""
     count: int
@@ -267,3 +277,4 @@ def generate_inventory():
 
 if __name__ == "__main__":
     generate_inventory()
+

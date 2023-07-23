@@ -5,7 +5,7 @@ from collections import Counter, defaultdict
 import math
 
 from .generate_inventory import SKU
-from .inventory import PRODUCTS_LIST
+from .inventory import PRODUCTS_LIST, GROUP_OFFERS
 
 
 # 2 different types of offer for now.
@@ -56,7 +56,12 @@ def checkout(skus: str):
             # and add that number to the list. use defaultdict to simplify stuff.
             free_products[bogof_offer.free_product] += num_free
 
-    # 2. now do the normal offers and price summing.
+    # 2. Now handle the ``Buy any n of A,B,C,D,E for m``
+    # we handle this by selecting out all of them per group offer, and adding used ones to the "free" list,
+    # then manually adding the full price on.
+    for group_offer in GROUP_OFFERS
+
+    # 3. now do the normal offers and price summing.
     for product_name, product_order_count in orders_counter.items():
         product = products_map[product_name]
 
@@ -84,3 +89,4 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
+
