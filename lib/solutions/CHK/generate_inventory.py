@@ -2,6 +2,8 @@
 Generate a module containing a list of class instances based on the given inventory below.
 Could be extended to take it like a cmd program but more than enough for now.
 
+Alternatively, you could do this whole thing by reading the same way and then inserting into a database.
+
 Just run ``python generate_inventory.py`` to regenerate.
 
 """
@@ -117,6 +119,11 @@ class SKU:
 MODULE_TEMPLATE = """
 from .generate_inventory import SKU, SpecialOffer, BOGOFOffer
 
+
+GROUP_OFFERS = [
+    {group_offers}
+]
+
 PRODUCTS_LIST = [
 {templates}
 ]
@@ -138,6 +145,7 @@ SKU_TEMPLATE = """
 
 SPECIAL_OFFER_TEMPLATE = """SpecialOffer(count={count}, price={price}),"""
 BOGOF_OFFER_TEMPLATE = """BOGOFOffer(count={count}, free_product="{free_product}", free_count={free_count}),"""
+GROUP_OFFER_TEMPLATE = """GroupOffer(count={count}, price={price}, products=[{products}]),"""
 
 
 def get_special_offer(offer_str: str) -> str:
@@ -184,12 +192,12 @@ def get_group_offer(offer_str: str) -> str:
     count = int(pieces[2])
     price = int(pieces[-1])
     products_base_str = pieces[4].strip("()")
-    products = ", ".join([f'"{p}"' for p in products_base_str.split(",")])
+    products = ", ".join(sorted([f'"{p}"' for p in products_base_str.split(",")]))
 
     return GROUP_OFFER_TEMPLATE(
         count=count,
-        products=products,
         price=price,
+        products=products,
     )
 
 
@@ -218,6 +226,7 @@ def generate_inventory():
 
         offer_templates = []
         bogof_offer_templates = []
+        group_offer_templates = []
         if offers:
             for offer_str in offers.split(", "):    # ", " **including the space** to avoid splitting on group offers.
                 if "for" in offer_str:
@@ -246,7 +255,10 @@ def generate_inventory():
 
         full_products_template = indent("\n".join(product_templates), "")
 
-        full_module_template = MODULE_TEMPLATE.format(templates=full_products_template).strip("\n")
+        full_module_template = MODULE_TEMPLATE.format(
+            templates=full_products_template,
+            group_offers=full_group_offer_template,
+        ).strip("\n")
 
         with open("inventory.py", "w") as f:
             f.write(full_module_template)
@@ -254,5 +266,6 @@ def generate_inventory():
 
 if __name__ == "__main__":
     generate_inventory()
+
 
 
