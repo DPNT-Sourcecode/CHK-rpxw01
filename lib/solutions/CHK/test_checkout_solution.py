@@ -15,5 +15,3 @@ from .checkout_solution import checkout
 ])
 def test_checkout(input_str, expected_price):
     assert checkout(input_str) == expected_price
-
-

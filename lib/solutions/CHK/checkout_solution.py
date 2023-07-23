@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from collections import Counter
+from collections import Counter, defaultdict
 import math
 
 
@@ -26,8 +26,8 @@ class BOGOFOffer:
     free_product: str
     free_count: int
 
-    def process(self, remaining_order_count: int) -> tuple[int, dict[str, int]]:
-        """Handle the counting, return the remaining count, and a dict to extend the free_products with."""
+    def process(self, remaining_order_count: int) -> tuple[int, int]:
+        """Handle the counting, return the remaining count, and a count to extend the free_products with."""
 
         num_free = math.floor(remaining_order_count / self.count)
         num_remaining = remaining_order_count % self.count
@@ -112,7 +112,7 @@ def checkout(skus: str):
     # 1. handle the bogofs by looking for those and either constructing a second string without the free products,
     # or by building a dict listing the number free of each product.
 
-    free_products = dict()
+    free_products = defaultdict(int)
 
     for product_name, product_order_count in orders_counter.items():
         product = products_map[product_name]
@@ -139,9 +139,3 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
-
-
-
-
-
-
