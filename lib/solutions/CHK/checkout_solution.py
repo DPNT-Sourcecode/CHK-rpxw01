@@ -120,10 +120,10 @@ def checkout(skus: str):
         product = products_map[product_name]
         # For each bogof (in case there could be multiple)
         # default is empty list so fine to just iterate.
-        # TODO: sort by number required for free (asc)
         remaining_order_count = product_order_count
         # for each bogof for that product
-        for bogof_offer in product.bogof_offers:
+        # sort by number required for free (asc)
+        for bogof_offer in sorted(product.bogof_offers, key=lambda x: x.count):
             # get the number the offer gives free of the other thing
             num_free, remaining_order_count = bogof_offer(remaining_order_count)
             # and add that number to the list. use defaultdict to simplify stuff.
@@ -143,8 +143,8 @@ def checkout(skus: str):
             continue
 
         #  handle the special offers
-        # TODO: sort by average price desc to get the best offer for the customer
-        for offer in product.offers:
+        # sort by average price desc to get the best offer for the customer
+        for offer in sorted(product.offers, lambda x: x.average_price):
             # get number of times the offer applies, calculate price
             number_offer_multiples = math.floor(remaining_order_count / offer.count)
             product_order_price += number_offer_multiples * offer.price
@@ -157,6 +157,7 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
+
 
 
 
