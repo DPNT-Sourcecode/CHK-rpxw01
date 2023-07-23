@@ -1,8 +1,9 @@
-import dataclasses, field
+from dataclasses import dataclass, field
 from collections import Counter
+import math
 
 
-dataclass
+@ dataclass
 class SpecialOffer:
     """Represents a special offer for some product."""
     count: int
@@ -19,7 +20,7 @@ class SKU:
     """
     name: str
     price: int
-    offer: SpecialOffer | None
+    offer: SpecialOffer | None = None
 
 
 products_list = [
@@ -69,12 +70,14 @@ def checkout(skus: str):
 
     total_price = 0
     orders_counter = Counter(list(skus))
+    print(skus, orders_counter)
     for product_name, product_order_count in orders_counter.items():
         base_price = products_map[product_name].price
         offer = products_map[product_name].offer
         #  handle the special offer
         product_order_price = 0
         if offer is not None:
+            breakpoint()
             number_offer_multiples = math.floor(product_order_count / offer.count)
             remaining_orders = product_order_count % offer.count
 
@@ -85,3 +88,4 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
+
