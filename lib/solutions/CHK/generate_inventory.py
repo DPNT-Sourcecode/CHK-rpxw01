@@ -140,7 +140,7 @@ SPECIAL_OFFER_TEMPLATE = """SpecialOffer(count={count}, price={price}),"""
 BOGOF_OFFER_TEMPLATE = """BOGOFOffer(count={count}, free_product="{free_product}", free_count={free_count}),"""
 
 
-def get_special_offer(offer_str):
+def get_special_offer(offer_str: str) -> str:
     """Takes a string like ``3Q for 80`` and formats a ``SpecialOffer`` init.
     """
     pieces = offer_str.strip().split()
@@ -154,7 +154,7 @@ def get_special_offer(offer_str):
     )
 
 
-def get_bogof_offer(offer_str):
+def get_bogof_offer(offer_str: str) -> str:
     """
     Takes a string like ``2F get one F free`` and formats a BOGOFOffer init.
     """
@@ -173,6 +173,11 @@ def get_bogof_offer(offer_str):
         free_count=1,
     )
 
+def get_group_offer(offer_str: str) -> str:
+    """
+    Takes a string like
+    """
+
 
 def generate_inventory():
     """
@@ -183,6 +188,7 @@ def generate_inventory():
     into a database, for a more realistic scenario.
     """
     product_templates = []
+    group_offer_templates = []
     for inventory_line in INVENTORY.strip().splitlines():
 
         # don't strip the bars off the ends, else the rows without offers will have fewer items after splitting.
@@ -199,11 +205,13 @@ def generate_inventory():
         offer_templates = []
         bogof_offer_templates = []
         if offers:
-            for offer_str in offers.split(","):
+            for offer_str in offers.split(", "):    # ", " **including the space** to avoid splitting on group offers.
                 if "for" in offer_str:
                     offer_templates.append(get_special_offer(offer_str))
                 elif "get one" in offer_str:
                     bogof_offer_templates.append(get_bogof_offer(offer_str))
+                elif "any" in offer_str:
+                    group_offer_templates.append(get_group_offer(offer_str))
                 else:
                     raise ValueError(f"Some unsupported offer str: {offer_str=}")
         if offer_templates:
@@ -232,3 +240,4 @@ def generate_inventory():
 
 if __name__ == "__main__":
     generate_inventory()
+
