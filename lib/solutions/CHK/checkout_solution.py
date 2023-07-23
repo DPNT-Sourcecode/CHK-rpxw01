@@ -43,7 +43,8 @@ products_list = [
     ),
 ]
 
-
+products_map: dict[str, SKU] = {p.name: p for p in products_list}
+allowed_products: set[str] = {p.name for p in products_list}
 
 
 # noinspection PyUnusedLocal
@@ -60,6 +61,7 @@ def checkout(skus: str):
     """
 
     orders_counter = Counter(list(skus))
+
 
 
 
