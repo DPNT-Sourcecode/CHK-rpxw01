@@ -1,4 +1,5 @@
 import dataclasses, field
+from collections import Counter
 
 
 dataclass
@@ -21,7 +22,26 @@ class SKU:
     offer: SpecialOffer | None
 
 
-
+products_list = [
+    SKU(
+        name="A",
+        price=50,
+        offer=SpecialOffer(count=3, price=130),
+    ),
+    SKU(
+        name="B",
+        price=30,
+        offer=SpecialOffer(count=2, price=45),
+    ),
+    SKU(
+        name="C",
+        price=20,
+    ),
+    SKU(
+        name="D",
+        price=15,
+    ),
+]
 
 
 
@@ -36,7 +56,11 @@ def checkout(skus: str):
     The input is not well defined for now, so we will assume (lol) that it is like
     ``AABBCCC`` to mean, eg, [2xA, 2xB, 3xC] for now,
     and correct it later on if needed depending on how the tests go.
+    Maybe I take a time penalty but in reality you just go back and ask for a more precise spec...
     """
+
+    orders_counter = Counter(list(skus))
+
 
 
 
