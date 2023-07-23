@@ -48,8 +48,8 @@ class SKU:
     """
     name: str
     price: int
-    offers: list[SpecialOffer] | None = None
-    bogof_offers: list[BOGOFOffer] | None = None
+    offers: list[SpecialOffer] = field(default_factory=list)
+    bogof_offers: list[BOGOFOffer] = field(default_factory=list)
 
 
 products_list = [
@@ -117,25 +117,28 @@ def checkout(skus: str):
     for product_name, product_order_count in orders_counter.items():
         product = products_map[product_name]
         # For each bogof (in case there could be multiple)
+        # default is empty list so fine to just iterate.
         # TODO: sort by number required for free (asc)
-        if product.bogof_offers:
-            remaining_order_count = product_order_count
-            # for each bogof for that product
-            for bogof_offer in product.bogof_offers:
-                # get the number the offer gives free of the other thing
-                num_free, remaining_order_count = bogof_offer(remaining_order_count)
-                # and add that number to the list. use defaultdict to simplify stuff.
-                free_products[bogof_offer.free_product] += num_free
+        remaining_order_count = product_order_count
+        # for each bogof for that product
+        for bogof_offer in product.bogof_offers:
+            # get the number the offer gives free of the other thing
+            num_free, remaining_order_count = bogof_offer(remaining_order_count)
+            # and add that number to the list. use defaultdict to simplify stuff.
+            free_products[bogof_offer.free_product] += num_free
 
-
-
-
+    # 2. now do the normal offers and price summing.
     for product_name, product_order_count in orders_counter.items():
         product = products_map[product_name]
-        offer = products_map[product_name].offer
-        #  handle the special offer
+
+        # initialise price to zero
         product_order_price = 0
-        if offer is not None:
+        remaining_order_count = product_order_count
+
+        # remove any free items based on the bogofs, but capped at zero
+        remaining_order_count = max(0, remaining_order_count - free_products[product_name])
+        #  handle the special offer
+        for offer in product.offers:
             number_offer_multiples = math.floor(product_order_count / offer.count)
             remaining_orders = product_order_count % offer.count
 
@@ -146,4 +149,5 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
+
 
