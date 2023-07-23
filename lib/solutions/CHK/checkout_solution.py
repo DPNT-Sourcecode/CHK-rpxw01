@@ -1,3 +1,6 @@
+"""
+See ``generate_offers.py`` for how to create the inventory.
+"""
 from collections import Counter, defaultdict
 import math
 

@@ -9,6 +9,9 @@ PRODUCTS_LIST = [
             SpecialOffer(count=3, price=130),
             SpecialOffer(count=5, price=200),
         ],
+        bogof_offers=[
+
+        ],
     ),
 
 
@@ -18,6 +21,9 @@ PRODUCTS_LIST = [
         offers=[
             SpecialOffer(count=2, price=45),
         ],
+        bogof_offers=[
+
+        ],
     ),
 
 
@@ -25,6 +31,9 @@ PRODUCTS_LIST = [
         name="C",
         price=20,
         offers=[
+
+        ],
+        bogof_offers=[
 
         ],
     ),
@@ -36,6 +45,9 @@ PRODUCTS_LIST = [
         offers=[
 
         ],
+        bogof_offers=[
+
+        ],
     ),
 
 
@@ -43,6 +55,9 @@ PRODUCTS_LIST = [
         name="E",
         price=40,
         offers=[
+
+        ],
+        bogof_offers=[
             BOGOFOffer(count=2, free_product="B", free_count=1),
         ],
     ),
@@ -52,6 +67,9 @@ PRODUCTS_LIST = [
         name="F",
         price=10,
         offers=[
+
+        ],
+        bogof_offers=[
             BOGOFOffer(count=2, free_product="F", free_count=1),
         ],
     ),
@@ -61,6 +79,9 @@ PRODUCTS_LIST = [
         name="G",
         price=20,
         offers=[
+
+        ],
+        bogof_offers=[
 
         ],
     ),
@@ -73,6 +94,9 @@ PRODUCTS_LIST = [
             SpecialOffer(count=5, price=45),
             SpecialOffer(count=10, price=80),
         ],
+        bogof_offers=[
+
+        ],
     ),
 
 
@@ -80,6 +104,9 @@ PRODUCTS_LIST = [
         name="I",
         price=35,
         offers=[
+
+        ],
+        bogof_offers=[
 
         ],
     ),
@@ -91,6 +118,9 @@ PRODUCTS_LIST = [
         offers=[
 
         ],
+        bogof_offers=[
+
+        ],
     ),
 
 
@@ -100,6 +130,9 @@ PRODUCTS_LIST = [
         offers=[
             SpecialOffer(count=2, price=150),
         ],
+        bogof_offers=[
+
+        ],
     ),
 
 
@@ -107,6 +140,9 @@ PRODUCTS_LIST = [
         name="L",
         price=90,
         offers=[
+
+        ],
+        bogof_offers=[
 
         ],
     ),
@@ -118,6 +154,9 @@ PRODUCTS_LIST = [
         offers=[
 
         ],
+        bogof_offers=[
+
+        ],
     ),
 
 
@@ -125,6 +164,9 @@ PRODUCTS_LIST = [
         name="N",
         price=40,
         offers=[
+
+        ],
+        bogof_offers=[
             BOGOFOffer(count=3, free_product="M", free_count=1),
         ],
     ),
@@ -136,6 +178,9 @@ PRODUCTS_LIST = [
         offers=[
 
         ],
+        bogof_offers=[
+
+        ],
     ),
 
 
@@ -144,6 +189,9 @@ PRODUCTS_LIST = [
         price=50,
         offers=[
             SpecialOffer(count=5, price=200),
+        ],
+        bogof_offers=[
+
         ],
     ),
 
@@ -154,6 +202,9 @@ PRODUCTS_LIST = [
         offers=[
             SpecialOffer(count=3, price=80),
         ],
+        bogof_offers=[
+
+        ],
     ),
 
 
@@ -161,6 +212,9 @@ PRODUCTS_LIST = [
         name="R",
         price=50,
         offers=[
+
+        ],
+        bogof_offers=[
             BOGOFOffer(count=3, free_product="Q", free_count=1),
         ],
     ),
@@ -172,6 +226,9 @@ PRODUCTS_LIST = [
         offers=[
 
         ],
+        bogof_offers=[
+
+        ],
     ),
 
 
@@ -181,6 +238,9 @@ PRODUCTS_LIST = [
         offers=[
 
         ],
+        bogof_offers=[
+
+        ],
     ),
 
 
@@ -188,6 +248,9 @@ PRODUCTS_LIST = [
         name="U",
         price=40,
         offers=[
+
+        ],
+        bogof_offers=[
             BOGOFOffer(count=3, free_product="U", free_count=1),
         ],
     ),
@@ -200,6 +263,9 @@ PRODUCTS_LIST = [
             SpecialOffer(count=2, price=90),
             SpecialOffer(count=3, price=130),
         ],
+        bogof_offers=[
+
+        ],
     ),
 
 
@@ -207,6 +273,9 @@ PRODUCTS_LIST = [
         name="W",
         price=20,
         offers=[
+
+        ],
+        bogof_offers=[
 
         ],
     ),
@@ -218,6 +287,9 @@ PRODUCTS_LIST = [
         offers=[
 
         ],
+        bogof_offers=[
+
+        ],
     ),
 
 
@@ -227,6 +299,9 @@ PRODUCTS_LIST = [
         offers=[
 
         ],
+        bogof_offers=[
+
+        ],
     ),
 
 
@@ -234,6 +309,9 @@ PRODUCTS_LIST = [
         name="Z",
         price=50,
         offers=[
+
+        ],
+        bogof_offers=[
 
         ],
     ),

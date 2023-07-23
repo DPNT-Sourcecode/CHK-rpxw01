@@ -130,6 +130,9 @@ SKU_TEMPLATE = """
         offers=[
 {offers}
         ],
+        bogof_offers=[
+{bogof_offers}
+        ],
     ),
 """
 
@@ -194,23 +197,29 @@ def generate_inventory():
         offers = pieces[3]
 
         offer_templates = []
+        bogof_offer_templates = []
         if offers:
             for offer_str in offers.split(","):
                 if "for" in offer_str:
                     offer_templates.append(get_special_offer(offer_str))
                 elif "get one" in offer_str:
-                    offer_templates.append(get_bogof_offer(offer_str))
+                    bogof_offer_templates.append(get_bogof_offer(offer_str))
                 else:
                     raise ValueError(f"Some unsupported offer str: {offer_str=}")
         if offer_templates:
             offer_template = indent("\n".join(offer_templates), "            ")
         else:
             offer_template = ""
+        if bogof_offer_templates:
+            bogof_offer_template = indent("\n".join(bogof_offer_templates), "            ")
+        else:
+            bogof_offer_template = ""
 
         product_templates.append(SKU_TEMPLATE.format(
             name=product,
             price=price,
-            offers=offer_template
+            offers=offer_template,
+            bogof_offers=bogof_offer_template,
         ))
 
         full_products_template = indent("\n".join(product_templates), "")
