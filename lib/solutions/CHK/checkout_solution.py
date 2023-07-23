@@ -32,6 +32,10 @@ class SKU:
     For now it has a name and a price, plus optionally a special offer.
     We will assume that it could have multiple types of offer later,
     but simplify a little and do it for only one now until we know more.
+
+    Takes 2 separate lists of offers/bogof_offers for now,
+    but if there are more then they could always be combined and we
+    could search through with an isinstance or something.
     """
     name: str
     price: int
@@ -43,12 +47,12 @@ products_list = [
     SKU(
         name="A",
         price=50,
-        offer=SpecialOffer(count=3, price=130),
+        offer=[SpecialOffer(count=3, price=130)],
     ),
     SKU(
         name="B",
         price=30,
-        offer=SpecialOffer(count=2, price=45),
+        offer=[SpecialOffer(count=2, price=45)],
     ),
     SKU(
         name="C",
@@ -57,6 +61,17 @@ products_list = [
     SKU(
         name="D",
         price=15,
+    ),
+    SKU(
+        name="E",
+        price=40,
+        bogof_offers=[
+            BOGOFOffer(
+                count=2,
+                free_product="B",
+                free_count=1,
+            )
+        ]
     ),
 ]
 
@@ -72,10 +87,7 @@ def checkout(skus: str):
     Round 2.
 
     The argument is a string containing the SKUs of all products in the basket.
-    The input is not well defined for now, so we will assume (lol) that it is like
-    ``AABBCCC`` to mean, eg, [2xA, 2xB, 3xC] for now,
-    and correct it later on if needed depending on how the tests go.
-    Maybe I take a time penalty but in reality you just go back and ask for a more precise spec...
+    Eg ``AABBCCC`` to mean, eg, [2xA, 2xB, 3xC].
 
     If the input is invalid (implements as the string containing any character that is not one of the product names)
     then return a ``-1`` response.
@@ -103,6 +115,7 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
+
 
 
 
