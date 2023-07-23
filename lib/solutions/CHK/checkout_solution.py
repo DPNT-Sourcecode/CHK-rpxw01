@@ -1,5 +1,8 @@
 """
 See ``generate_offers.py`` for how to create the inventory.
+
+We assume that the 3 offer types  (bogof, special_offer, group_offer) are independent still.
+Would at least partially work, but could get funny.
 """
 from collections import Counter, defaultdict
 import math
@@ -59,7 +62,11 @@ def checkout(skus: str):
     # 2. Now handle the ``Buy any n of A,B,C,D,E for m``
     # we handle this by selecting out all of them per group offer, and adding used ones to the "free" list,
     # then manually adding the full price on.
+    # To always give the best deal to the customer, we select the whole group of affected orders,
+    # then take the most expensive to exclude
     for group_offer in GROUP_OFFERS:
+        affected_products = group_offer.products
+        affected_product_list =
 
 
 
@@ -91,5 +98,6 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
+
 
 
