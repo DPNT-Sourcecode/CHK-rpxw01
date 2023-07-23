@@ -58,9 +58,17 @@ def checkout(skus: str):
     ``AABBCCC`` to mean, eg, [2xA, 2xB, 3xC] for now,
     and correct it later on if needed depending on how the tests go.
     Maybe I take a time penalty but in reality you just go back and ask for a more precise spec...
+
+    If the input is invalid (implements as the string containing any character that is not one of the product names)
+    then return a ``-1`` response.
     """
+    separate_orders = list(skus)
+
+    if set(separate_orders) | allowed_products != allowed_products:
+        return -1
 
     orders_counter = Counter(list(skus))
+
 
 
 
