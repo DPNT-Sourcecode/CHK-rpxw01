@@ -1,14 +1,12 @@
-from dataclasses import dataclass, field
 from collections import Counter, defaultdict
 import math
+
+from .generate_inventory import SKU
+from .inventory import PRODUCTS_LIST
 
 
 # 2 different types of offer for now.
 # Could be worth subclassing them off something common later, but not obviously worthwhile now.
-
-
-
-
 
 
 # noinspection PyUnusedLocal
@@ -24,9 +22,8 @@ def checkout(skus: str):
     If the input is invalid (implements as the string containing any character that is not one of the product names)
     then return a ``-1`` response.
     """
-    products_map: dict[str, SKU] = {p.name: p for p in products_list}
-    allowed_products: set[str] = {p.name for p in products_list}
-
+    products_map: dict[str, SKU] = {p.name: p for p in PRODUCTS_LIST}
+    allowed_products: set[str] = {p.name for p in PRODUCTS_LIST}
 
     separate_orders = list(skus)
 

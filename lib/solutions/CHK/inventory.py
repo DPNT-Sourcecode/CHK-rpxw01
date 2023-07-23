@@ -1,6 +1,6 @@
 from .generate_inventory import SKU, SpecialOffer, BOGOFOffer
 
-products_list = [
+PRODUCTS_LIST = [
 
     SKU(
         name="A",

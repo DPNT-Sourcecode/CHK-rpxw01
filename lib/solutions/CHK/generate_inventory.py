@@ -1,4 +1,12 @@
+"""
+Generate a module containing a list of class instances based on the given inventory below.
+Could be extended to take it like a cmd program but more than enough for now.
+
+Just run ``python generate_inventory.py`` to regenerate.
+
+"""
 from textwrap import indent
+from dataclasses import dataclass, field
 
 
 INVENTORY = """
@@ -31,10 +39,85 @@ INVENTORY = """
 """
 
 
+###################################################################
+
+
+@dataclass
+class SpecialOffer:
+    """Represents a special offer for some product."""
+    count: int
+    price: int
+    average_price: float = field(init=False)
+
+    def __post_init__(self):
+        """Calculate average price per item for sorting purposes to give customer the best deal."""
+        self.average_price = self.price / self.count
+
+
+@dataclass
+class BOGOFOffer:
+    """
+    Buy `n X product`, get `m X another_product` free.
+    Can be later extended if needed for more combinations but works for this spec.
+    """
+    count: int
+    free_product: str
+    free_count: int
+
+    def process(self, base_product: str, remaining_order_count: int) -> tuple[int, int]:
+        """
+        Handle the counting, return the remaining count, and a count to extend the free_products with.
+
+        Need to do a loop for each application since if the bogof refers to itself, it requires an extra count for it to actually work.
+
+        For example, if it is "2A" giving free "1B", we need 4A-> 2B free,
+        But if its 2A -> 1A:
+
+            - 3A-> 1Afree, 2Apaid,
+            - 4A -> 1Afree, 3Apaid
+            - 5A -> 1Afree, 4Apaid  (next would be free)
+            - 6A -> 2Afree, 4Apaid
+
+        Can't actually only do a check once because of this edge case.
+        """
+
+        if base_product == self.free_product:
+            num_required_to_apply = self.count + self.free_count
+        else:
+            num_required_to_apply = self.count
+
+        num_free = 0
+        while remaining_order_count >= num_required_to_apply:
+            num_free += 1
+            remaining_order_count -= num_required_to_apply
+
+        return num_free, remaining_order_count
+
+
+@dataclass
+class SKU:
+    """
+    Represents one type of product
+    For now it has a name and a price, plus optionally a special offer.
+    We will assume that it could have multiple types of offer later,
+    but simplify a little and do it for only one now until we know more.
+
+    Takes 2 separate lists of offers/bogof_offers for now,
+    but if there are more then they could always be combined and we
+    could search through with an isinstance or something.
+    """
+    name: str
+    price: int
+    offers: list[SpecialOffer] = field(default_factory=list)
+    bogof_offers: list[BOGOFOffer] = field(default_factory=list)
+
+
+###################################################################
+
 MODULE_TEMPLATE = """
 from .generate_inventory import SKU, SpecialOffer, BOGOFOffer
 
-products_list = [
+PRODUCTS_LIST = [
 {templates}
 ]
 
@@ -140,11 +223,3 @@ def generate_inventory():
 
 if __name__ == "__main__":
     generate_inventory()
-
-
-
-
-
-
-
-
