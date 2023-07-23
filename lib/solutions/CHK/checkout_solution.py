@@ -12,9 +12,11 @@ class SpecialOffer:
     """Represents a special offer for some product."""
     count: int
     price: int
+    average_price: float = field(init=False)
 
-    # TODO: add average price for sorting to give customer best deal
-
+    def __post_init__(self):
+        """Calculate average price per item for sorting purposes to give customer the best deal."""
+        self.average_price = price / count
 
 @ dataclass
 class BOGOFOffer:
@@ -137,17 +139,24 @@ def checkout(skus: str):
 
         # remove any free items based on the bogofs, but capped at zero
         remaining_order_count = max(0, remaining_order_count - free_products[product_name])
-        #  handle the special offer
-        for offer in product.offers:
-            number_offer_multiples = math.floor(product_order_count / offer.count)
-            remaining_orders = product_order_count % offer.count
+        if remaining_order_count == 0:
+            continue
 
+        #  handle the special offers
+        # TODO: sort by average price desc to get the best offer for the customer
+        for offer in product.offers:
+            # get number of times the offer applies, calculate price
+            number_offer_multiples = math.floor(remaining_order_count / offer.count)
             product_order_price += number_offer_multiples * offer.price
-            product_order_price += remaining_orders * base_price
-        else:
-            product_order_price += product_order_count * base_price
+
+            # update the remaining_order_count
+            remaining_order_count = remaining_order_count % offer.count
+
+        # add price for any remaining ones.
+        product_order_price += remaining_order_count * base_price
         total_price += product_order_price
 
     return total_price
+
 
 
