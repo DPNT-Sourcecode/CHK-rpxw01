@@ -3,7 +3,8 @@ from .checkout_solution import checkout
 
 def generate_test_string(input_str: str) -> str:
     """
-    Take a  string like `5A 2B` and convert it into `AAAAABB`
+    Take a  string like `5A 2B` and convert it into `AAAAABB`.
+    Requires a number, only works for single letter products
     """
     if not input_str:
         return ""
@@ -12,23 +13,36 @@ def generate_test_string(input_str: str) -> str:
         count = int(subset[:-1])
         product = subset[-1:]
         result_str = result_str + count * product
+    return result_str
+
+
+
+@pytest.mark.parametrize("input, expected", [
+    ("", ""),
+    ("1A", "A")
+    ("3A 2B", "AAABB"),
+    ("2A 2B 2C", "AABBCCDD"),
+])
+def test_generate_test_string(input: str, expected: str):
+    assert generate_test_string(input) == expected
 
 
 
 @pytest.mark.parametrize("input_str, expected_price", [
-    ("A", 50),
-    ("AA", 100),
-    ("AAA", 130),
-    ("AAAAA", 200),
-    ("", ),
-    ("AB", 80),
-    ("BAB", 95),
-    ("DD", 30),
-    ("ABCDAB", 180),
-    ("ABCDABE", -1),
-    ("CCCCC", 100),
+    ("", 0),
+    ("1A", 50),
+    ("2A", 100),
+    ("2B", 45),
+    ("1A 2B", 95),
+    ("7A", 300),
+    ("8A", 330),
+    ("9A", 380),
+    ("2B 1E", 85),
+    ("2B 2E", 70),
+    ("2B 2E 1D", 85),
 ])
 def test_checkout(input_str, expected_price):
-    assert checkout(input_str) == expected_price
+    assert checkout(generate_test_string(input_str)) == expected_price
+
 
 
