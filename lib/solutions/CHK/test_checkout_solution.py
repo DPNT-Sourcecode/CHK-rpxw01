@@ -38,11 +38,12 @@ def test_generate_test_string(input: str, expected: str):
     ("8A", 330),
     ("9A", 380),
     ("2B 1E", 85),
-    ("2B 2E", 70),
-    ("2B 2E 1D", 85),
+    ("2B 2E", 110),
+    ("2B 2E 1D", 125),
 ])
 def test_checkout(input_str, expected_price):
     assert checkout(generate_test_string(input_str)) == expected_price
+
 
 
 

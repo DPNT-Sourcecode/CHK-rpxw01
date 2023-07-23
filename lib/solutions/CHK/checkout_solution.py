@@ -128,7 +128,7 @@ def checkout(skus: str):
         # sort by number required for free (asc)
         for bogof_offer in sorted(product.bogof_offers, key=lambda x: x.count):
             # get the number the offer gives free of the other thing
-            num_free, remaining_order_count = bogof_offer(remaining_order_count)
+            num_free, remaining_order_count = bogof_offer.process(remaining_order_count)
             # and add that number to the list. use defaultdict to simplify stuff.
             free_products[bogof_offer.free_product] += num_free
 
@@ -160,6 +160,7 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
+
 
 
 
