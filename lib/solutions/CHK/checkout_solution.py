@@ -13,6 +13,8 @@ class SpecialOffer:
     count: int
     price: int
 
+    # TODO: add average price for sorting to give customer best deal
+
 
 @ dataclass
 class BOGOFOffer:
@@ -99,6 +101,20 @@ def checkout(skus: str):
 
     total_price = 0
     orders_counter = Counter(list(skus))
+
+    # 1. handle the bogofs by looking for those and either constructing a second string without the free products,
+    # or by building a dict listing the number free of each product.
+
+    free_products = dict()
+
+    for product_name, product_order_count in orders_counter.items():
+        product = products_map[product_name]
+        if product.bogof_offers:
+            for bogof_offer in product.bogof_offers:
+
+
+
+
     for product_name, product_order_count in orders_counter.items():
         base_price = products_map[product_name].price
         offer = products_map[product_name].offer
@@ -115,6 +131,7 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
+
 
 
 
