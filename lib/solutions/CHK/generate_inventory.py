@@ -48,7 +48,7 @@ BOGOF_OFFER_TEMPLATE = "BOGOFOffer(count={count}, free_product={free_product}, f
 def get_special_offer(offer_str):
     """Takes a string like ``3Q for 80`` and formats a ``SpecialOffer`` init.
     """
-    pieces = offer_str.split()
+    pieces = offer_str.strip().split()
     price = pieces[2]
     subset = pieces[0]
     count = int(subset[:-1])
@@ -60,8 +60,23 @@ def get_special_offer(offer_str):
 
 
 def get_bogof_offer(offer_str):
-    ...
+    """
+    Takes a string like ``2F get one F free`` and formats a BOGOFOffer init.
+    """
+    pieces = offer_str.strip().split()
+    product = pieces[3]
 
+    # If this isn't only for "one" then it needs more logic...
+    assert " one " in offer_str
+
+    subset = pieces[0]
+    count = int(subset[:-1])
+
+    return BOGOF_OFFER_TEMPLATE.format(
+        count=count,
+        free_product=free_product,
+        free_count=free_count,
+    )
 
 def generate_inventory():
     """
@@ -84,8 +99,12 @@ def generate_inventory():
         price = int(pieces[2])
         offers = pieces[3]
 
+        offer_templates = []
         if offers:
-            for offer in offers.split(",")
+            for offer in offers.split(","):
+                if "for" in offer_str:
+                    offer_templates.append(get_special_offer(offer_str.))
+
 
 
 
@@ -95,6 +114,7 @@ def generate_inventory():
 
 if __name__ == "__main__":
     generate_inventory()
+
 
 
 
