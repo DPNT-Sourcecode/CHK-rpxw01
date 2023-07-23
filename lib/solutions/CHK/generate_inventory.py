@@ -45,13 +45,13 @@ SKU_TEMPLATE = """
         name="{name}",
         price={price},
         offers=[
-            {offers}
+{offers}
         ],
     ),
 """
 
-SPECIAL_OFFER_TEMPLATE = "SpecialOffer(count={count}, price={price})"
-BOGOF_OFFER_TEMPLATE = "BOGOFOffer(count={count}, free_product={free_product}, free_count={free_count})"
+SPECIAL_OFFER_TEMPLATE = """SpecialOffer(count={count}, price={price}),"""
+BOGOF_OFFER_TEMPLATE = """BOGOFOffer(count={count}, free_product="{free_product}", free_count={free_count}),"""
 
 
 def get_special_offer(offer_str):
@@ -120,7 +120,7 @@ def generate_inventory():
                 else:
                     raise ValueError(f"Some unsupported offer str: {offer_str=}")
         if offer_templates:
-            offer_template = indent("\n".join(offer_templates), "    ")
+            offer_template = indent("\n".join(offer_templates), "            ")
         else:
             offer_template = ""
 
@@ -130,9 +130,9 @@ def generate_inventory():
             offers=offer_template
         ))
 
-        full_products_template = indent("\n".join(product_templates), "    ")
+        full_products_template = indent("\n".join(product_templates), "")
 
-        full_module_template = MODULE_TEMPLATE.format(templates=full_products_template)
+        full_module_template = MODULE_TEMPLATE.format(templates=full_products_template).strip("\n")
 
         with open("inventory.py", "w") as f:
             f.write(full_module_template)
