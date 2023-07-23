@@ -29,21 +29,22 @@ class BOGOFOffer:
     free_product: str
     free_count: int
 
-    def is_allowed(self, from_product: str, remaining_order_count: int) -> bool:
-        """
-        Check that if the affected product is the same as the base product,
-        there are enough in the basket to actually give the offer.
-        Eg, if there is a count of 2, for 1 free, assert that there are >= 3 left to work with.
-        """
-        if from_product != self.free_product:
-            return True
-        if remaining_order_count >= self.count + self.free_count:
-            return True
-        else:
-            return False
-
     def process(self, base_product: str, remaining_order_count: int) -> tuple[int, int]:
-        """Handle the counting, return the remaining count, and a count to extend the free_products with."""
+        """
+        Handle the counting, return the remaining count, and a count to extend the free_products with.
+
+        Need to do a loop for each application since if the bogof refers to itself, it requires an extra count for it to actually work.
+
+        For example, if it is "2A" giving free "1B", we need 4A-> 2B free,
+        But if its 2A -> 1A:
+
+            - 3A-> 1Afree, 2Apaid,
+            - 4A -> 1Afree, 3Apaid
+            - 5A -> 1Afree, 4Apaid  (next would be free)
+            - 6A -> 2Afree, 4Apaid
+
+        Can't actually only do a check once because of this edge case.
+        """
 
         if base_product == self.product:
             num_required_to_apply = self.count + self.free_count
@@ -55,11 +56,7 @@ class BOGOFOffer:
             num_free += 1
             remaining_order_count -= num_required_to_apply
 
-            ...
-
-        num_free = math.floor(remaining_order_count / self.count)
-        num_remaining = remaining_order_count % self.count
-        return num_free, num_remaining
+        return num_free, remaining_order_count
 
 
 @dataclass
@@ -113,6 +110,17 @@ products_list = [
             )
         ]
     ),
+    SKU(
+        name="F",
+        price=10,
+        bogof_offers=[
+            BOGOFOffer(
+                count=2,
+                free_product="F",
+                free_count=1,
+            )
+        ]
+    ),
 ]
 
 products_map: dict[str, SKU] = {p.name: p for p in products_list}
@@ -154,10 +162,9 @@ def checkout(skus: str):
         # sort by number required for free (asc)
         for bogof_offer in sorted(product.bogof_offers, key=lambda x: x.count):
             # If the bogof refers to itself, check that there are enough in the basket to allow it.
-            if not bogof_offer.is_allowed(product.name, remaining_order_count):
-                continue
             # get the number the offer gives free of the other thing
-            num_free, remaining_order_count = bogof_offer.process(remaining_order_count)
+            # If it is a self-referential bogof, it checks that there are enough.
+            num_free, remaining_order_count = bogof_offer.process(product.name, remaining_order_count)
             # and add that number to the list. use defaultdict to simplify stuff.
             free_products[bogof_offer.free_product] += num_free
 
@@ -189,6 +196,7 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
+
 
 
 

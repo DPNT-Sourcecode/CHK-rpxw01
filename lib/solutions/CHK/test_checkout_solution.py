@@ -1,6 +1,7 @@
 import pytest
 from .checkout_solution import checkout
 
+
 def generate_test_string(input_str: str) -> str:
     """
     Take a  string like `5A 2B` and convert it into `AAAAABB`.
@@ -16,7 +17,6 @@ def generate_test_string(input_str: str) -> str:
     return result_str
 
 
-
 @pytest.mark.parametrize("input, expected", [
     ("", ""),
     ("1A", "A"),
@@ -26,6 +26,8 @@ def generate_test_string(input_str: str) -> str:
 def test_generate_test_string(input: str, expected: str):
     assert generate_test_string(input) == expected
 
+
+########################################################
 
 
 @pytest.mark.parametrize("input_str, expected_price", [
@@ -40,6 +42,18 @@ def test_generate_test_string(input: str, expected: str):
     ("2B 1E", 85),
     ("2B 2E", 110),
     ("2B 2E 1D", 125),
+
+    ("1F", 10),
+    ("2F", 20),
+    ("3F", 20),
+    ("4F", 30),
+    ("5F", 40),
+    ("6F", 40),
+
+    ("6F 2A", 140),
+
+
 ])
 def test_checkout(input_str, expected_price):
     assert checkout(generate_test_string(input_str)) == expected_price
+
