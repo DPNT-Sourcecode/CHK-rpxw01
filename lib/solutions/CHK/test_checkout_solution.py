@@ -43,8 +43,3 @@ def test_generate_test_string(input: str, expected: str):
 ])
 def test_checkout(input_str, expected_price):
     assert checkout(generate_test_string(input_str)) == expected_price
-
-
-
-
-
