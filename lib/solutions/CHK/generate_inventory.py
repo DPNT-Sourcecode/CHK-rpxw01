@@ -29,11 +29,33 @@ INVENTORY = """
 | Z    | 50    |                        |
 """
 
+SKU_TEMPLATE = """
+    SKU(
+        name="{name}",
+        price={price},
+        offers=[
+            {offers}
+        ],
+    ),
+"""
+
+SPECIAL_OFFER_TEMPLATE = "SpecialOffer(count={count}, price={price})"
+BOGOF_OFFER_TEMPLATE = "SpecialOffer(count={count}, price={price})"
+
+
+
+
+def get_reduction_offer(offer_str):
+    ...
+
+def get_bogof_offer(offer_str):
+    ...
 
 
 def generate_inventory():
     """
     Generate the inventory page based on the input as given in the problem spec.
+    (you could copy/paste/string format, but this seems more reasonable to just make it repeatable.)
 
     Creates a module with a big list of nested classes, but could also do the same to go
     into a database, for a more realistic scenario.
@@ -41,10 +63,20 @@ def generate_inventory():
     for inventory_line in INVENTORY.strip().splitlines():
 
         # don't strip the bars off the ends, else the rows without offers will have fewer items after splitting.
-        # eg: ``['', ' C    ', ' 20    ', '                        ', '']``
+        # => eg: ``['', ' C    ', ' 20    ', '                        ', '']``
         pieces = inventory_line.split("|")
 
+        # => eg ``['', 'C', '20', '', '']``
         pieces = [p.strip() for p in pieces]
+
+        product = pieces[1]
+        price = int(pieces[2])
+        offers = pieces[3]
+
+        if offers:
+            for offer in offers.split(",")
+
+
 
 
 
@@ -52,5 +84,6 @@ def generate_inventory():
 
 if __name__ == "__main__":
     generate_inventory()
+
 
 
