@@ -40,13 +40,24 @@ SKU_TEMPLATE = """
 """
 
 SPECIAL_OFFER_TEMPLATE = "SpecialOffer(count={count}, price={price})"
-BOGOF_OFFER_TEMPLATE = "SpecialOffer(count={count}, price={price})"
+BOGOF_OFFER_TEMPLATE = "BOGOFOffer(count={count}, free_product={free_product}, free_count={free_count})"
 
 
 
 
-def get_reduction_offer(offer_str):
-    ...
+def get_special_offer(offer_str):
+    """Takes a string like ``3Q for 80`` and formats a ``SpecialOffer`` init.
+    """
+    pieces = offer_str.split()
+    price = pieces[2]
+    subset = pieces[0]
+    count = int(subset[:-1])
+
+    return SPECIAL_OFFER_TEMPLATE.format(
+        count=count,
+        price=price,
+    )
+
 
 def get_bogof_offer(offer_str):
     ...
@@ -84,6 +95,7 @@ def generate_inventory():
 
 if __name__ == "__main__":
     generate_inventory()
+
 
 
 
