@@ -42,8 +42,14 @@ class BOGOFOffer:
         else:
             return False
 
-    def process(self, remaining_order_count: int) -> tuple[int, int]:
+    def process(self, base_product: str, remaining_order_count: int) -> tuple[int, int]:
         """Handle the counting, return the remaining count, and a count to extend the free_products with."""
+
+        if
+        num_required_to_apply
+        while more_to_do:
+
+            ...
 
         num_free = math.floor(remaining_order_count / self.count)
         num_remaining = remaining_order_count % self.count
@@ -177,4 +183,5 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
+
 
