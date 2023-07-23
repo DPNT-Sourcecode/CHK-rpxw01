@@ -70,14 +70,12 @@ def checkout(skus: str):
 
     total_price = 0
     orders_counter = Counter(list(skus))
-    print(skus, orders_counter)
     for product_name, product_order_count in orders_counter.items():
         base_price = products_map[product_name].price
         offer = products_map[product_name].offer
         #  handle the special offer
         product_order_price = 0
         if offer is not None:
-            breakpoint()
             number_offer_multiples = math.floor(product_order_count / offer.count)
             remaining_orders = product_order_count % offer.count
 
@@ -88,4 +86,5 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
+
 

@@ -7,12 +7,13 @@ from .checkout_solution import checkout
     ("AA", 100),
     ("AAA", 130),
     ("AB", 80),
-    ("BAB", 110),
+    ("BAB", 95),
     ("DD", 30),
-    ("ABCDAB", 195),
+    ("ABCDAB", 180),
     ("ABCDABE", -1),
     ("CCCCC", 100),
 ])
 def test_checkout(input_str, expected_price):
     assert checkout(input_str) == expected_price
+
 
