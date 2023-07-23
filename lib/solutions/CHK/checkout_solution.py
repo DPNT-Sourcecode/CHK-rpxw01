@@ -46,7 +46,7 @@ class BOGOFOffer:
         Can't actually only do a check once because of this edge case.
         """
 
-        if base_product == self.product:
+        if base_product == self.free_product:
             num_required_to_apply = self.count + self.free_count
         else:
             num_required_to_apply = self.count
@@ -196,6 +196,7 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
+
 
 
 
