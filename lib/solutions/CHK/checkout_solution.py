@@ -59,7 +59,9 @@ def checkout(skus: str):
     # 2. Now handle the ``Buy any n of A,B,C,D,E for m``
     # we handle this by selecting out all of them per group offer, and adding used ones to the "free" list,
     # then manually adding the full price on.
-    for group_offer in GROUP_OFFERS
+    for group_offer in GROUP_OFFERS:
+
+
 
     # 3. now do the normal offers and price summing.
     for product_name, product_order_count in orders_counter.items():
@@ -89,4 +91,5 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
+
 
