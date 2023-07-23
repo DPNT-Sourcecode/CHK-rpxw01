@@ -26,6 +26,13 @@ class BOGOFOffer:
     free_product: str
     free_count: int
 
+    def process(self, remaining_order_count: int) -> tuple[int, dict[str, int]]:
+        """Handle the counting, return the remaining count, and a dict to extend the free_products with."""
+
+        num_free = math.floor(remaining_order_count / self.count)
+        num_remaining = remaining_order_count % self.count
+        return num_free, num_remaining
+
 
 @dataclass
 class SKU:
@@ -115,6 +122,7 @@ def checkout(skus: str):
 
 
 
+
     for product_name, product_order_count in orders_counter.items():
         base_price = products_map[product_name].price
         offer = products_map[product_name].offer
@@ -131,6 +139,7 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
+
 
 
 
