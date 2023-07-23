@@ -28,3 +28,25 @@ INVENTORY = """
 | Y    | 10    |                        |
 | Z    | 50    |                        |
 """
+
+
+
+def generate_inventory():
+    """
+    Generate the inventory page based on the input as given in the problem spec.
+
+    Creates a module with a big list of nested classes, but could also do the same to go
+    into a database, for a more realistic scenario.
+    """
+    for inventory_line in INVENTORY.strip().splitlines():
+        cleaned_line = inventory_line.strip("| ")
+        pieces = cleaned_line.split("|")
+        pieces = [p.strip() for p in pieces]
+
+
+
+
+
+if __name__ == "__main__":
+    generate_inventory()
+
