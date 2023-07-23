@@ -16,7 +16,7 @@ class SpecialOffer:
 
     def __post_init__(self):
         """Calculate average price per item for sorting purposes to give customer the best deal."""
-        self.average_price = price / count
+        self.average_price = self.price / self.count
 
 @ dataclass
 class BOGOFOffer:
@@ -58,12 +58,12 @@ products_list = [
     SKU(
         name="A",
         price=50,
-        offer=[SpecialOffer(count=3, price=130)],
+        offers=[SpecialOffer(count=3, price=130)],
     ),
     SKU(
         name="B",
         price=30,
-        offer=[SpecialOffer(count=2, price=45)],
+        offers=[SpecialOffer(count=2, price=45)],
     ),
     SKU(
         name="C",
@@ -125,6 +125,7 @@ def checkout(skus: str):
         # sort by number required for free (asc)
         for bogof_offer in sorted(product.bogof_offers, key=lambda x: x.count):
             # get the number the offer gives free of the other thing
+            breakpoint()
             num_free, remaining_order_count = bogof_offer(remaining_order_count)
             # and add that number to the list. use defaultdict to simplify stuff.
             free_products[bogof_offer.free_product] += num_free
@@ -144,7 +145,7 @@ def checkout(skus: str):
 
         #  handle the special offers
         # sort by average price desc to get the best offer for the customer
-        for offer in sorted(product.offers, lambda x: x.average_price):
+        for offer in sorted(product.offers, key=lambda x: x.average_price):
             # get number of times the offer applies, calculate price
             number_offer_multiples = math.floor(remaining_order_count / offer.count)
             product_order_price += number_offer_multiples * offer.price
@@ -153,10 +154,11 @@ def checkout(skus: str):
             remaining_order_count = remaining_order_count % offer.count
 
         # add price for any remaining ones.
-        product_order_price += remaining_order_count * base_price
+        product_order_price += remaining_order_count * product.price
         total_price += product_order_price
 
     return total_price
+
 
 
 

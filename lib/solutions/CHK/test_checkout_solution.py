@@ -19,9 +19,9 @@ def generate_test_string(input_str: str) -> str:
 
 @pytest.mark.parametrize("input, expected", [
     ("", ""),
-    ("1A", "A")
+    ("1A", "A"),
     ("3A 2B", "AAABB"),
-    ("2A 2B 2C", "AABBCCDD"),
+    ("2A 2B 2C 2D", "AABBCCDD"),
 ])
 def test_generate_test_string(input: str, expected: str):
     assert generate_test_string(input) == expected
@@ -43,6 +43,7 @@ def test_generate_test_string(input: str, expected: str):
 ])
 def test_checkout(input_str, expected_price):
     assert checkout(generate_test_string(input_str)) == expected_price
+
 
 
 
