@@ -120,29 +120,27 @@ def generate_inventory():
                 else:
                     raise ValueError(f"Some unsupported offer str: {offer_str=}")
         if offer_templates:
-            offer_template = indent(offer_templates.join("\n"), "    ")
+            offer_template = indent("\n".join(offer_templates), "    ")
         else:
             offer_template = ""
 
-        product_templates.append(SKU_TEMPLATE(
+        product_templates.append(SKU_TEMPLATE.format(
             name=product,
             price=price,
             offers=offer_template
         ))
 
-        full_products_template = indent(product_templates.join("\n"), "    ")
+        full_products_template = indent("\n".join(product_templates), "    ")
 
+        full_module_template = MODULE_TEMPLATE.format(templates=full_products_template)
 
-
-
-
-
-
-
+        with open("inventory.py", "w") as f:
+            f.write(full_module_template)
 
 
 if __name__ == "__main__":
     generate_inventory()
+
 
 
 
