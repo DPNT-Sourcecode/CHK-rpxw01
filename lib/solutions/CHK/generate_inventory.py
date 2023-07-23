@@ -30,6 +30,16 @@ INVENTORY = """
 | Z    | 50    |                        |
 """
 
+
+MODULE_TEMPLATE = """
+from .generate_inventory import SKU, SpecialOffer, BOGOFOffer
+
+products_list = [
+{templates}
+]
+
+"""
+
 SKU_TEMPLATE = """
     SKU(
         name="{name}",
@@ -42,8 +52,6 @@ SKU_TEMPLATE = """
 
 SPECIAL_OFFER_TEMPLATE = "SpecialOffer(count={count}, price={price})"
 BOGOF_OFFER_TEMPLATE = "BOGOFOffer(count={count}, free_product={free_product}, free_count={free_count})"
-
-
 
 
 def get_special_offer(offer_str):
@@ -75,9 +83,10 @@ def get_bogof_offer(offer_str):
 
     return BOGOF_OFFER_TEMPLATE.format(
         count=count,
-        free_product=free_product,
-        free_count=free_count,
+        free_product=product,
+        free_count=1,
     )
+
 
 def generate_inventory():
     """
@@ -115,11 +124,15 @@ def generate_inventory():
         else:
             offer_template = ""
 
-        product_template = SKU_TEMPLATE(
+        product_templates.append(SKU_TEMPLATE(
             name=product,
             price=price,
             offers=offer_template
-        )
+        ))
+
+        full_products_template = indent(product_templates.join("\n"), "    ")
+
+
 
 
 
@@ -130,6 +143,7 @@ def generate_inventory():
 
 if __name__ == "__main__":
     generate_inventory()
+
 
 
 
