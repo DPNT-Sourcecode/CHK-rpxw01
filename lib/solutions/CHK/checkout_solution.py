@@ -18,6 +18,7 @@ class SpecialOffer:
         """Calculate average price per item for sorting purposes to give customer the best deal."""
         self.average_price = self.price / self.count
 
+
 @ dataclass
 class BOGOFOffer:
     """
@@ -27,6 +28,19 @@ class BOGOFOffer:
     count: int
     free_product: str
     free_count: int
+
+    def is_allowed(self, from_product: str, remaining_order_count: int) -> bool:
+        """
+        Check that if the affected product is the same as the base product,
+        there are enough in the basket to actually give the offer.
+        Eg, if there is a count of 2, for 1 free, assert that there are >= 3 left to work with.
+        """
+        if from_product != self.free_product:
+            return True
+        if remaining_order_count >= self.count + self.free_count:
+            return True
+        else:
+            return False
 
     def process(self, remaining_order_count: int) -> tuple[int, int]:
         """Handle the counting, return the remaining count, and a count to extend the free_products with."""
@@ -127,6 +141,9 @@ def checkout(skus: str):
         # for each bogof for that product
         # sort by number required for free (asc)
         for bogof_offer in sorted(product.bogof_offers, key=lambda x: x.count):
+            # If the bogof refers to itself, check that there are enough in the basket to allow it.
+            if not bogof_offer.is_allowed(product.name, remaining_order_count):
+                continue
             # get the number the offer gives free of the other thing
             num_free, remaining_order_count = bogof_offer.process(remaining_order_count)
             # and add that number to the list. use defaultdict to simplify stuff.
@@ -160,3 +177,4 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
+
