@@ -1,3 +1,4 @@
+from textwrap import indent
 
 
 INVENTORY = """
@@ -86,6 +87,7 @@ def generate_inventory():
     Creates a module with a big list of nested classes, but could also do the same to go
     into a database, for a more realistic scenario.
     """
+    product_templates = []
     for inventory_line in INVENTORY.strip().splitlines():
 
         # don't strip the bars off the ends, else the rows without offers will have fewer items after splitting.
@@ -101,9 +103,23 @@ def generate_inventory():
 
         offer_templates = []
         if offers:
-            for offer in offers.split(","):
+            for offer_str in offers.split(","):
                 if "for" in offer_str:
-                    offer_templates.append(get_special_offer(offer_str.))
+                    offer_templates.append(get_special_offer(offer_str))
+                elif "get one" in offer_str:
+                    offer_templates.append(get_bogof_offer(offer_str))
+                else:
+                    raise ValueError(f"Some unsupported offer str: {offer_str=}")
+        if offer_templates:
+            offer_template = indent(offer_templates.join("\n"), "    ")
+        else:
+            offer_template = ""
+
+        product_template = SKU_TEMPLATE(
+            name=product,
+            price=price,
+            offers=offer_template
+        )
 
 
 
@@ -114,6 +130,7 @@ def generate_inventory():
 
 if __name__ == "__main__":
     generate_inventory()
+
 
 
 
