@@ -12,32 +12,32 @@ from dataclasses import dataclass, field
 
 
 INVENTORY = """
-| A    | 50    | 3A for 130, 5A for 200 |
-| B    | 30    | 2B for 45              |
-| C    | 20    |                        |
-| D    | 15    |                        |
-| E    | 40    | 2E get one B free      |
-| F    | 10    | 2F get one F free      |
-| G    | 20    |                        |
-| H    | 10    | 5H for 45, 10H for 80  |
-| I    | 35    |                        |
-| J    | 60    |                        |
-| K    | 80    | 2K for 150             |
-| L    | 90    |                        |
-| M    | 15    |                        |
-| N    | 40    | 3N get one M free      |
-| O    | 10    |                        |
-| P    | 50    | 5P for 200             |
-| Q    | 30    | 3Q for 80              |
-| R    | 50    | 3R get one Q free      |
-| S    | 30    |                        |
-| T    | 20    |                        |
-| U    | 40    | 3U get one U free      |
-| V    | 50    | 2V for 90, 3V for 130  |
-| W    | 20    |                        |
-| X    | 90    |                        |
-| Y    | 10    |                        |
-| Z    | 50    |                        |
+| A    | 50    | 3A for 130, 5A for 200          |
+| B    | 30    | 2B for 45                       |
+| C    | 20    |                                 |
+| D    | 15    |                                 |
+| E    | 40    | 2E get one B free               |
+| F    | 10    | 2F get one F free               |
+| G    | 20    |                                 |
+| H    | 10    | 5H for 45, 10H for 80           |
+| I    | 35    |                                 |
+| J    | 60    |                                 |
+| K    | 70    | 2K for 120                      |
+| L    | 90    |                                 |
+| M    | 15    |                                 |
+| N    | 40    | 3N get one M free               |
+| O    | 10    |                                 |
+| P    | 50    | 5P for 200                      |
+| Q    | 30    | 3Q for 80                       |
+| R    | 50    | 3R get one Q free               |
+| S    | 20    | buy any 3 of (S,T,X,Y,Z) for 45 |
+| T    | 20    | buy any 3 of (S,T,X,Y,Z) for 45 |
+| U    | 40    | 3U get one U free               |
+| V    | 50    | 2V for 90, 3V for 130           |
+| W    | 20    |                                 |
+| X    | 17    | buy any 3 of (S,T,X,Y,Z) for 45 |
+| Y    | 20    | buy any 3 of (S,T,X,Y,Z) for 45 |
+| Z    | 21    | buy any 3 of (S,T,X,Y,Z) for 45 |
 """
 
 
@@ -194,7 +194,7 @@ def get_group_offer(offer_str: str) -> str:
     products_base_str = pieces[4].strip("()")
     products = ", ".join(sorted([f'"{p}"' for p in products_base_str.split(",")]))
 
-    return GROUP_OFFER_TEMPLATE(
+    return GROUP_OFFER_TEMPLATE.format(
         count=count,
         price=price,
         products=products,
@@ -229,12 +229,12 @@ def generate_inventory():
         group_offer_templates = []
         if offers:
             for offer_str in offers.split(", "):    # ", " **including the space** to avoid splitting on group offers.
-                if "for" in offer_str:
+                if "any" in offer_str:
+                    group_offer_templates.append(get_group_offer(offer_str))
+                elif "for" in offer_str:
                     offer_templates.append(get_special_offer(offer_str))
                 elif "get one" in offer_str:
                     bogof_offer_templates.append(get_bogof_offer(offer_str))
-                elif "any" in offer_str:
-                    group_offer_templates.append(get_group_offer(offer_str))
                 else:
                     raise ValueError(f"Some unsupported offer str: {offer_str=}")
         if offer_templates:
@@ -254,6 +254,7 @@ def generate_inventory():
         ))
 
         full_products_template = indent("\n".join(product_templates), "")
+        full_group_offer_template = indent("\n".join(set(group_offer_templates)), "")   # go via a set to deduplicate.
 
         full_module_template = MODULE_TEMPLATE.format(
             templates=full_products_template,
@@ -266,6 +267,3 @@ def generate_inventory():
 
 if __name__ == "__main__":
     generate_inventory()
-
-
-

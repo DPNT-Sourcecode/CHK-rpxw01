@@ -1,5 +1,10 @@
 from .generate_inventory import SKU, SpecialOffer, BOGOFOffer
 
+
+GROUP_OFFERS = [
+    GroupOffer(count=3, price=45, products=["S", "T", "X", "Y", "Z"]),
+]
+
 PRODUCTS_LIST = [
 
     SKU(
@@ -126,9 +131,9 @@ PRODUCTS_LIST = [
 
     SKU(
         name="K",
-        price=80,
+        price=70,
         offers=[
-            SpecialOffer(count=2, price=150),
+            SpecialOffer(count=2, price=120),
         ],
         bogof_offers=[
 
@@ -222,7 +227,7 @@ PRODUCTS_LIST = [
 
     SKU(
         name="S",
-        price=30,
+        price=20,
         offers=[
 
         ],
@@ -283,7 +288,7 @@ PRODUCTS_LIST = [
 
     SKU(
         name="X",
-        price=90,
+        price=17,
         offers=[
 
         ],
@@ -295,7 +300,7 @@ PRODUCTS_LIST = [
 
     SKU(
         name="Y",
-        price=10,
+        price=20,
         offers=[
 
         ],
@@ -307,7 +312,7 @@ PRODUCTS_LIST = [
 
     SKU(
         name="Z",
-        price=50,
+        price=21,
         offers=[
 
         ],
