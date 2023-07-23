@@ -65,10 +65,23 @@ def checkout(skus: str):
     # To always give the best deal to the customer, we select the whole group of affected orders,
     # then take the most expensive to exclude
     for group_offer in GROUP_OFFERS:
-        affected_products = group_offer.products
-        affected_product_list =
+        # Get all orders that could be part of the group offer, sorted in descending price order.
+        affected_product_list_price_desc = sorted([
+            order
+            # (order, products_map[order].price)
+            for order in separate_orders
+            if order in group_offer.products
+        ], key=lambda x: products_map[x].price, reverse=True)
 
+        # Eg, there are 7 possible things affected by this group in the whole order, so there are 2 groups.
+        total_groups = math.floor(len(affected_product_list_price_desc) / group_offer.count)
 
+        excluded_products = affected_product_list_price_desc[:total_groups * group_offer.count]
+
+        # For all we want to put the offer on, exclude them from the main pricing logic, and add the special price directly.
+        total_price += group_offer.price * total_groups
+        for excl_prod in excluded_products:
+            free_products[excl_prod] += 1
 
     # 3. now do the normal offers and price summing.
     for product_name, product_order_count in orders_counter.items():
@@ -98,6 +111,7 @@ def checkout(skus: str):
         total_price += product_order_price
 
     return total_price
+
 
 
 
