@@ -67,7 +67,25 @@ def checkout(skus: str):
     if set(separate_orders) | allowed_products != allowed_products:
         return -1
 
+    total_price = 0
     orders_counter = Counter(list(skus))
+    for product_name, product_order_count in orders_counter.items():
+        base_price = products_map[product_name].price
+        offer = products_map[product_name].offer
+        #  handle the special offer
+        product_order_price = 0
+        if offer is not None:
+            number_offer_multiples = math.floor(product_order_count / offer.count)
+            remaining_orders = product_order_count % offer.count
+
+            product_order_price += number_offer_multiples * offer.price
+            product_order_price += remaining_orders * base_price
+        else:
+            product_order_price += product_order_count * base_price
+        total_price += product_order_price
+
+    return total_price
+
 
 
 
